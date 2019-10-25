@@ -5,8 +5,14 @@
     <title>Edit file</title>
 </head>
 <body>
-{% for tag in tags %}
-    <h1>tag</h1>
-{% endfor %}
+{% with messages = get_flashed_messages() %}
+    <form action="{{ url_for('edit') }}" method="post">
+        Title:<input type="text" name="title" value={{ messages[0] }}> <br>
+        Artist:<input type="text" name="artist" value={{ messages[1] }}> <br>
+
+        Album:<input type="text" name="album" value={{ messages[2] }}> <br>
+{% endwith %}
+    <a href='/edit'> <input type="submit" name="submit" value="submit"></a>
+</form>
 </body>
 </html>
