@@ -21,11 +21,9 @@ def index():
             flash('No file selected for uploading')
             return redirect(request.url)
         if file:
-            print("hey")
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('File successfully uploaded')
-            return redirect('/')
+            return redirect('edit.html')
     else:
         return render_template('index.html')
 
