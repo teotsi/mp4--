@@ -8,25 +8,35 @@
 
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-    <div class="container">
-    <form action="{{ url_for('edit') }}" method="post">
-    <div class="form-group mb-2">
-        <label for="titleinput">Title</label>
-        <input class="form-control" type="text" name="title" id="titleinput" value={{ messages[0] }}>
-    </div>
+<div class="container">
+    <form action="{{ url_for('edit', id=song_id) }}" method="post">
+        <div class="form-group mb-2">
+            <label for="titleinput">Title</label>
+            <input class="form-control" type="text" name="title" id="titleinput">
+        </div>
 
-    <div class="form-group mb-2">
-        <label for="artistinput">Artist</label>
-        <input class="form-control" type="text" name="artist" id="artistinput" value={{ messages[1] }}>
-    </div>
-    <div class="form-group mb-2">
-        <label for="albuminput">Album</label>
-        <input class="form-control" type="text" name="album" id="albuminput" value={{ messages[2] }}>
-    </div>
-{% endwith %}
-<a href='/edit'> <input type="submit" name="submit" value="Save" class="btn btn-primary mb-2"></a>
-</form>
+        <div class="form-group mb-2">
+            <label for="artistinput">Artist</label>
+            <input class="form-control" type="text" name="artist" id="artistinput">
+        </div>
+        <div class="form-group mb-2">
+            <label for="albuminput">Album</label>
+            <input class="form-control" type="text" name="album" id="albuminput">
+        </div>
+        {% if song_id %}
+            <a href='{{ url_for('edit',id=song_id) }}'> <input type="submit" name="submit" value="Save"
+                                                               class="btn btn-primary mb-2" onclick="activateButton();"></a>
+        {% endif %}
+    </form>
+    <a href="/"><input type="button" name="return" id="returnBtn" class="btn btn-primary mb2 d-none"
+                       value="Convert next video"></a>
 </div>
+<script>
+    var return_btn = document.getElementById("returnBtn");
+
+    function activateButton() {
+        return_btn.classList.remove("d-none");
+    }
+</script>
 </body>
 </html>

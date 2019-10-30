@@ -8,16 +8,6 @@
 
 </head>
 <body>
-<form method="post" action="/" enctype="multipart/form-data">
-    <dl>
-        <p>
-            <input type="file" name="file" autocomplete="off" required>
-        </p>
-    </dl>
-    <p>
-        <input type="submit" value="Submit">
-    </p>
-</form>
 <br>
 <div class="container">
     <div class="row">
@@ -29,14 +19,16 @@
 
                 <div class="form-group mb-3">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="file_input" id="file_input" formmethod="post"
+                        <input type="file" accept="video/mp4, video/x-msvideo" class="custom-file-input"
+                               name="file_input" id="file_input" formmethod="post"
                                formaction="/"
                                oninput="input_filename();">
                         <label id="file_input_label" class="custom-file-label" for="image">Select file</label>
                     </div>
                 </div>
 
-                <button onclick="upload('{{ request.url }}');" id="upload_btn" class="btn btn-primary">Upload</button>
+                <button onclick="upload('{{ request.url }}');" id="upload_btn" class="btn btn-primary" disabled>Upload
+                </button>
 
                 <button class="btn btn-primary d-none" id="loading_btn" type="button" disabled>
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -169,6 +161,7 @@
             if (request.status == 200) {
 
                 show_alert(`Done`, "success");
+                reset();
                 document.write(request.responseText);
                 console.log(request.responseText);
             } else {
@@ -212,7 +205,7 @@
     function input_filename() {
 
         file_input_label.innerText = input.files[0].name;
-
+        upload_btn.disabled = false;
     }
 
     // Function to reset the page

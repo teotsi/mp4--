@@ -1,15 +1,16 @@
+import hashlib
 import os
+import shutil
 
 import eyed3
 import moviepy.editor as mp
-from flask import Flask, render_template, request, redirect, flash, jsonify, make_response, url_for
+from flask import Flask, render_template, request, redirect, flash, send_file
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '.'
+app.config['UPLOAD_FOLDER'] = 'files'
 app.secret_key = "qwerty"
 extensions = ['mp4', 'avi', 'mp3']
-audio_file = ''
 
 
 def valid_file_extension(filename):
@@ -32,17 +33,17 @@ def index():
         if file:
             filename = secure_filename(file.filename)
             if valid_file_extension(filename):
+                if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                    os.makedirs(app.config['UPLOAD_FOLDER'])
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                global audio_file
-                audio_file = filename.split('.')[0] + '.mp3'
+                audio_file_id = hashlib.md5(
+                    (filename.split('.')[0] + str(request.cookies.get('filesize'))).encode()).hexdigest()
+                audio_file = app.config['UPLOAD_FOLDER'] + '/' + audio_file_id + '.mp3'
+                print(audio_file)
                 clip = mp.VideoFileClip(filename)
                 clip.audio.write_audiofile(audio_file)
-                audiofile = eyed3.load(audio_file)
-                flash(audiofile.tag.title)
-                flash(audiofile.tag.artist)
-                flash(audiofile.tag.album)
                 print("moving on")
-                return render_template('edit.html')
+                return render_template('edit.html', song_id=audio_file_id)
             else:
                 flash("invalid extension")
                 return redirect(request.url)
@@ -50,19 +51,25 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/edit', methods=['POST'])
-def edit():
-    print("hey")
+@app.route('/edit/<string:id>', methods=['POST'])
+def edit(id=None):
+    if id == None:
+        return "hehehehehe"
     if request.method == 'POST':
         new_title = request.form['title']
         new_artist = request.form['artist']
         new_album = request.form['album']
+        audio_file = app.config['UPLOAD_FOLDER'] + '/' + id + '.mp3'
         song = eyed3.load(audio_file).tag
         song.title = new_title
         song.artist = new_artist
         song.album = new_album
         song.save()
-        return make_response(jsonify({"message": "File uploaded"}), 200)
+        if new_title is not None and new_artist is not None:
+            new_name = app.config['UPLOAD_FOLDER'] + '/' + new_artist + '-' + new_title + '.mp3'
+            shutil.copy(audio_file, new_name)
+            audio_file = new_name
+        return send_file(audio_file, as_attachment=True)
 
 
 if __name__ == '__main__':
