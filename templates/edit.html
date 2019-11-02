@@ -18,9 +18,9 @@
             <div class="input-group mb-3"> <!-- creating title select dropdown with text -->
                 <div class="input-group-prepend">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" id="titledrop" onclick="activation();">Select
-                    </button>
-                    <div class="dropdown-menu"><!-- setting dropdown items-->
+                            aria-haspopup="true" aria-expanded="false" id="titledrop">Select
+                    </button> <!--dropdown button-->
+                    <div class="dropdown-menu" id="titlemenu"><!-- setting dropdown items-->
                         {% if messages %}
                             {% for message in messages %}
                                 <a class="dropdown-item" href="#">{{ message }}</a>
@@ -36,7 +36,7 @@
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" id="artistdrop">Select
                     </button>
-                    <div class="dropdown-menu"><!-- setting dropdown items-->
+                    <div class="dropdown-menu" id="artistmenu"><!-- setting dropdown items-->
 
                         {% if messages %}
                             {% for message in messages %}
@@ -85,12 +85,12 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <script>
-    function activation() {
-        console.log("whatever")
-        $("#titledrop").change(function () {
-            $('#titleinput').val($(this).val());
-        }).change();
-    }
+    $('#titlemenu a').click(function () {
+        $('#titleinput').val($(this).text());
+    });
+    $('#artistmenu a').click(function () {
+        $('#artistinput').val($(this).text());
+    });
 </script>
 </body>
 
