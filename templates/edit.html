@@ -5,38 +5,93 @@
     <title>Edit file</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="text/javascript" src="../static/editScripts.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 </head>
 <body>
 <div class="container">
-    <form action="{{ url_for('edit', id=song_id) }}" method="post">
-        <div class="form-group mb-2">
+    <h4>Success! You can set song tags below or download the file as-is.</h4>
+    <form action="{{ url_for('edit', id=song_id) }}" method="post"> <!--starting form input -->
+        {% with messages = get_flashed_messages() %}
             <label for="titleinput">Title</label>
-            <input class="form-control" type="text" name="title" id="titleinput">
-        </div>
-
-        <div class="form-group mb-2">
+            <div class="input-group mb-3"> <!-- creating title select dropdown with text -->
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" id="titledrop" onclick="activation();">Select
+                    </button>
+                    <div class="dropdown-menu"><!-- setting dropdown items-->
+                        {% if messages %}
+                            {% for message in messages %}
+                                <a class="dropdown-item" href="#">{{ message }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <input class="form-control" type="text" name="title" id="titleinput" placeholder="Song title"></div>
+            <!-- text input-->
             <label for="artistinput">Artist</label>
-            <input class="form-control" type="text" name="artist" id="artistinput">
-        </div>
-        <div class="form-group mb-2">
-            <label for="albuminput">Album</label>
-            <input class="form-control" type="text" name="album" id="albuminput">
-        </div>
-        {% if song_id %}
-            <a href='{{ url_for('edit',id=song_id) }}'> <input type="submit" name="submit" value="Save"
-                                                               class="btn btn-primary mb-2" onclick="activateButton();"></a>
-        {% endif %}
-    </form>
-    <a href="/"><input type="button" name="return" id="returnBtn" class="btn btn-primary mb2 d-none"
-                       value="Convert next video"></a>
-</div>
-<script>
-    var return_btn = document.getElementById("returnBtn");
+            <div class="input-group mb-3"> <!-- creating song select dropdown with text -->
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" id="artistdrop">Select
+                    </button>
+                    <div class="dropdown-menu"><!-- setting dropdown items-->
 
-    function activateButton() {
-        return_btn.classList.remove("d-none");
+                        {% if messages %}
+                            {% for message in messages %}
+                                <a class="dropdown-item" href="#">{{ message }}</a>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+                <input class="form-control" type="text" name="artist" id="artistinput" placeholder="Song Artist">
+            </div>
+            <div class="form-group mb-2">
+            </div>
+            <div class="form-group mb-2">
+                <label for="albuminput">Album</label>
+                <input class="form-control" type="text" name="album" id="albuminput" placeholder="Song album">
+            </div>
+            {% if song_id %}
+                <a href='{{ url_for('edit',id=song_id) }}'> <input type="submit" name="submit" value="Save"
+                                                                   class="btn btn-primary mb-2"
+                                                                   onclick="activateButton();"></a>
+            {% endif %}
+            <br>
+            <a href="/"><input type="button" name="return" id="returnBtn" class="btn btn-primary mb2 d-none"
+                               value="Convert next video"></a>
+        {% endwith %}
+    </form>
+    <div class="mp3playback" style="text-align: center">
+        <audio id="music" preload="true" controls controlslist="nodownload">
+            <source src={{ url_for("static",filename="files/"+song_id+'.mp3') }}>
+        </audio>
+        <div id="audioplayer">
+            <i id="pButton" class="fas fa-play"></i>
+            <div id="timeline">
+                <div id="playhead"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script>
+    function activation() {
+        console.log("whatever")
+        $("#titledrop").change(function () {
+            $('#titleinput').val($(this).val());
+        }).change();
     }
 </script>
 </body>
+
 </html>

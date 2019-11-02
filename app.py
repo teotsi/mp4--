@@ -1,14 +1,14 @@
 import hashlib
 import os
+import re
 import shutil
 
 import eyed3
 import moviepy.editor as mp
 from flask import Flask, render_template, request, redirect, flash, send_file
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'files'
+app.config['UPLOAD_FOLDER'] = 'static/files'
 app.secret_key = "qwerty"
 extensions = ['mp4', 'avi', 'mp3']
 
@@ -31,16 +31,24 @@ def index():
             flash('No file selected for uploading')
             return redirect(request.url)
         if file:
-            filename = secure_filename(file.filename)
+            filename = file.filename
             if valid_file_extension(filename):
                 if not os.path.exists(app.config['UPLOAD_FOLDER']):
                     os.makedirs(app.config['UPLOAD_FOLDER'])
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                mixed_song_name = filename.split('.')[0]
+                print(mixed_song_name)
+                tokens = re.split('[_-]', mixed_song_name)
+                print(tokens)
+                for token in tokens:
+                    print("flashing")
+                    flash(token)
                 audio_file_id = hashlib.md5(
-                    (filename.split('.')[0] + str(request.cookies.get('filesize'))).encode()).hexdigest()
+                    (mixed_song_name + str(request.cookies.get('filesize'))).encode()).hexdigest()
                 audio_file = app.config['UPLOAD_FOLDER'] + '/' + audio_file_id + '.mp3'
                 print(audio_file)
-                clip = mp.VideoFileClip(filename)
+                print(filename)
+                clip = mp.VideoFileClip(app.config['UPLOAD_FOLDER'] + '/' + filename)
                 clip.audio.write_audiofile(audio_file)
                 print("moving on")
                 return render_template('edit.html', song_id=audio_file_id)
