@@ -15,6 +15,9 @@ var alert_wrapper;
 var input;
 var file_input_label;
 
+//Get a reference to uploading button span
+var upload_span;
+
 // Function to show alerts
 function show_alert(message, alert) {
 
@@ -98,15 +101,17 @@ function upload(url) {
         // Update the progress text and progress bar
         progress.setAttribute("style", `width: ${Math.floor(percent_complete)}%`);
         progress_status.innerText = `${Math.floor(percent_complete)}% uploaded`;
+        if (percent_complete == 100) {
+            show_alert("Upload complete", "success");
+            loading_btn.innerHTML = "Converting...";
+        }
 
     });
 
     // request load handler (transfer complete)
     request.addEventListener("load", function (e) {
         if (request.status == 200) {
-
-            show_alert(`Done`, "success");
-            reset();
+            show_alert(`All done!`, "success");
             $('html').fadeOut('slow', function () {
                 document.write(request.responseText);
             });
@@ -166,6 +171,7 @@ function input_filename() {
     input = document.getElementById("file_input");
     file_input_label = document.getElementById("file_input_label");
 
+    upload_span = document.getElementById("uploading-span");
     file_input_label.innerText = input.files[0].name;
     upload_btn.disabled = false;
 }
