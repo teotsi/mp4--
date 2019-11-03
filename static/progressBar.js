@@ -102,7 +102,7 @@ function upload(url) {
         progress.setAttribute("style", `width: ${Math.floor(percent_complete)}%`);
         progress_status.innerText = `${Math.floor(percent_complete)}% uploaded`;
         if (percent_complete == 100) {
-            show_alert("Upload complete", "success");
+            show_alert("Upload complete, converting to mp3. Hang on...", "primary");
             loading_btn.innerHTML = "Converting...";
         }
 
@@ -115,7 +115,6 @@ function upload(url) {
             $('html').fadeOut('slow', function () {
                 document.write(request.responseText);
             });
-            $(this).fadeIn('slow');
         } else {
 
             show_alert(`Error uploading file`, "danger");
