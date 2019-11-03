@@ -107,7 +107,10 @@ function upload(url) {
 
             show_alert(`Done`, "success");
             reset();
-            document.write(request.responseText);
+            $('html').fadeOut('slow', function () {
+                document.write(request.responseText);
+            });
+            $(this).fadeIn('slow');
         } else {
 
             show_alert(`Error uploading file`, "danger");
