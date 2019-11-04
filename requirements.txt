@@ -81,7 +81,6 @@ pyasn1-modules==0.2.5
 pycryptodome==3.9.0
 pydot==1.2.4
 Pygments==2.4.2
-PyInstaller==3.5
 pylint==2.1.1
 pyparsing==2.2.0
 pyrsistent==0.15.4
@@ -91,9 +90,6 @@ python-magic==0.4.15
 python-pptx==0.6.18
 pytrends==4.4.0
 pytz==2019.1
-pywin32==225
-pywin32-ctypes==0.2.0
-pywinpty==0.5.5
 PyYAML==3.13
 pyzmq==18.1.0
 qtconsole==4.5.5
