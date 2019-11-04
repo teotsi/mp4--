@@ -88,7 +88,6 @@ pyrsistent==0.15.4
 PySocks==1.7.0
 python-dateutil==2.6.0
 python-magic==0.4.15
-python-magic-bin==0.4.14
 python-pptx==0.6.18
 pytrends==4.4.0
 pytz==2019.1
