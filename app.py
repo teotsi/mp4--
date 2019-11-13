@@ -35,9 +35,9 @@ class File(db.Model):
         return self.id
 
 
-def md5(fname):  # used to calculate md5 checksum for file
+def md5(file_name):  # used to calculate md5 checksum for file
     hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
+    with open(file_name, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
