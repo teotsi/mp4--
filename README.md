@@ -1,5 +1,5 @@
 # mp4--
-This app is running on [mp4converter.herokuapp.com](mp4converter.herokuapp.com)
+This app is running on [mp4converter.herokuapp.com](http://mp4converter.herokuapp.com)
 
 A simple full-stack, Flask-based website to convert mp4 files to mp3 files, with optional artist, title, album tags.
 For deployment you need to download Flask and Python 3.
