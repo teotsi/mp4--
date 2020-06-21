@@ -177,29 +177,13 @@ function input_filename() {
 
 // Function to reset the page
 function reset() {
-
     // Clear the input
     input.value = null;
-
-    // Hide the cancel button
     cancel_btn.classList.add("d-none");
-
-    // Reset the input element
     input.disabled = false;
-
-    // Show the upload button
     upload_btn.classList.remove("d-none");
-
-    // Hide the loading button
     loading_btn.classList.add("d-none");
-
-    // Hide the progress bar
     progress_wrapper.classList.add("d-none");
-
-    // Reset the progress bar state
     progress.setAttribute("style", `width: 0%`);
-
-    // Reset the input placeholder
     file_input_label.innerText = "Select file";
-
 }

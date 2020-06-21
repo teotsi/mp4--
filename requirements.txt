@@ -19,7 +19,7 @@ docx2txt==0.8
 EbookLib==0.17.1
 entrypoints==0.3
 extract-msg==0.23.1
-eyeD3==0.8.10
+eyeD3==0.8.11
 fastavro==0.21.23
 Flask==1.1.1
 flask-blog-toolkit==0.1.0
