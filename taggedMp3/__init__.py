@@ -16,6 +16,10 @@ db = SQLAlchemy()
 
 
 def create_app():
+    try:
+        os.remove(Path.cwd() / 'taggedMp3'/'site.db')
+    except OSError:
+        pass
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db?check_same_thread=False'  # sqlite .db file location
     app.config['UPLOAD_FOLDER'] = 'static/files'
