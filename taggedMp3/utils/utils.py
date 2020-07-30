@@ -1,7 +1,10 @@
 import re
+import shutil
 from pathlib import Path
 
+import eyed3
 import moviepy.editor as mp
+import sqlalchemy
 from flask import request
 from sqlalchemy import exists
 
@@ -34,3 +37,28 @@ def save_file():
                 db.session.commit()
             return 200, {'id': audio_file_checksum, 'tokens': tokens}
     return 400, 'file error'
+
+
+def edit_audio_file(id):
+    new_title = request.form['title']  # getting applied song tags
+    new_artist = request.form['artist']
+    new_album = request.form['album']
+    audio_file = Path(Config.UPLOAD_FOLDER) / f'{id}.mp3'  # getting file name
+    song = eyed3.load(str(audio_file)).tag  # loading mp3 file
+    song.title = new_title  # setting new tags
+    song.artist = new_artist
+    song.album = new_album
+    song.save()  # saving mp3 file
+    if new_title is not None and new_artist is not None:  # if the user provided title and artist we rename the file
+        new_name = Path.cwd() / Config.UPLOAD_FOLDER / f'{new_artist}-{new_title}.mp3'
+        if new_album is None:
+            new_album = ''
+        try:
+            # song = Song(id=id, title=new_title, artist=new_artist, album=new_album)
+            # db.session.add(song)
+            # db.session.commit()
+            shutil.copy(str(audio_file), str(new_name))
+        except sqlalchemy.exc.IntegrityError:
+            print("File exists")
+        audio_file = new_name
+    return audio_file
