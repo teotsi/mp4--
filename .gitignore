@@ -1,6 +1,6 @@
 /venv/
 /venv/Scripts/
 __pycache__
-.idea/
+.idea/::
 site.db
 web.wsgi

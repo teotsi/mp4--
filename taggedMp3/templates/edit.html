@@ -12,7 +12,7 @@
 <body>
 <div class="container" style="opacity: 0;">
     <h4>Success! You can set song tags below or download the file as-is.</h4>
-    <form action="{{ url_for('edit', id=song_id) }}" method="post"> <!--starting form input -->
+    <form action="{{ url_for('template_bp.edit', id=song_id) }}" method="post"> <!--starting form input -->
         {% with messages = get_flashed_messages() %}
             <label for="titleinput">Title</label>
             <div class="input-group mb-3"> <!-- creating title select dropdown with text -->
@@ -55,9 +55,9 @@
                 <input class="form-control" type="text" name="album" id="albuminput" placeholder="Song album">
             </div>
             {% if song_id %}
-                <a href='{{ url_for('edit',id=song_id) }}'> <input type="submit" name="submit" value="Save"
-                                                                   class="btn btn-primary mb-2"
-                                                                   onclick="activateButton();"></a>
+                <a href='{{ url_for('template_bp.edit',id=song_id) }}'> <input type="submit" name="submit" value="Save"
+                                                                               class="btn btn-primary mb-2"
+                                                                               onclick="activateButton();"></a>
             {% endif %}
             <br>
             <a href="/"><input type="button" name="return" id="returnBtn" class="btn btn-primary mb2 d-none"
