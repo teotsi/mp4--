@@ -15,6 +15,7 @@ from taggedMp3.utils import valid_file_extension, md5
 
 
 def save_file():
+    print(get_request_data(request))
     if 'file' not in request.files:
         return 400, 'no file found'
     file = request.files['file']
@@ -40,9 +41,10 @@ def save_file():
 
 
 def edit_audio_file(id):
-    new_title = request.form['title']  # getting applied song tags
-    new_artist = request.form['artist']
-    new_album = request.form['album']
+    data = get_request_data(request)
+    new_title = data['title']  # getting applied song tags
+    new_artist = data['artist']
+    new_album = data['album']
     audio_file = Path(Config.UPLOAD_FOLDER) / f'{id}.mp3'  # getting file name
     song = eyed3.load(str(audio_file)).tag  # loading mp3 file
     song.title = new_title  # setting new tags
@@ -61,4 +63,14 @@ def edit_audio_file(id):
         except sqlalchemy.exc.IntegrityError:
             print("File exists")
         audio_file = new_name
-    return audio_file
+    return audio_file.parent, audio_file.name
+
+
+def get_request_data(request):
+    data = request.get_json()
+    if not data:
+        try:
+            return request.form
+        except IndexError:
+            return {}
+    return data

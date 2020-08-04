@@ -26,4 +26,5 @@ def upload_song():
 
 @template_bp.route('/edit/<string:id>', methods=['POST'])
 def edit(id=None):
-    return send_file(str(edit_audio_file(id)), as_attachment=True)  # sending the file to user
+    directory, name = edit_audio_file(id)
+    return send_file(str(directory / name), as_attachment=True)  # sending the file to user

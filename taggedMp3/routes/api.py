@@ -21,5 +21,6 @@ def post_file():
 
 @api_bp.route('/edit/<string:id>', methods=['POST'])
 def edit(id=None):
-    file_name = f'{id}.mp3'
-    return send_from_directory(str(edit_audio_file(id).parent), file_name)  # sending the file to user
+    print(id)
+    directory, file_name = edit_audio_file(id)
+    return send_from_directory(str(directory), file_name, as_attachment=True)  # sending the file to user
