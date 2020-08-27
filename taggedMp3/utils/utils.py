@@ -13,6 +13,7 @@ from taggedMp3.config import Config
 from taggedMp3.model import File
 from taggedMp3.utils import valid_file_extension, md5
 
+SUPPORTED_TAGS=['title','artist','album']
 
 def save_file():
     print(get_request_data(request))
@@ -42,19 +43,22 @@ def save_file():
 
 def edit_audio_file(id):
     data = get_request_data(request)
-    new_title = data['title']  # getting applied song tags
-    new_artist = data['artist']
-    new_album = data['album']
+
     audio_file = Path(Config.UPLOAD_FOLDER) / f'{id}.mp3'  # getting file name
     song = eyed3.load(str(audio_file)).tag  # loading mp3 file
-    song.title = new_title  # setting new tags
-    song.artist = new_artist
-    song.album = new_album
+    
+    for tag in SUPPORTED_TAGS:
+        new_value = data.get(tag)
+        if new_value:
+            song.__setattr__(tag,new_value)        
+    
     song.save()  # saving mp3 file
+
+    new_title = data.get('title')
+    new_artist = data.get('artist')
+
     if new_title is not None and new_artist is not None:  # if the user provided title and artist we rename the file
         new_name = Path.cwd() / Config.UPLOAD_FOLDER / f'{new_artist}-{new_title}.mp3'
-        if new_album is None:
-            new_album = ''
         try:
             # song = Song(id=id, title=new_title, artist=new_artist, album=new_album)
             # db.session.add(song)
@@ -62,7 +66,9 @@ def edit_audio_file(id):
             shutil.copy(str(audio_file), str(new_name))
         except sqlalchemy.exc.IntegrityError:
             print("File exists")
-        audio_file = new_name
+    else:
+        new_name = Path.cwd() / Config.UPLOAD_FOLDER / f'{id}.mp3'
+    audio_file = new_name
     return audio_file.parent, audio_file.name
 
 
