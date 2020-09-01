@@ -1,6 +1,6 @@
 import hashlib
-
-extensions = ['mp4', 'avi']
+from pathlib import Path
+extensions = ['.mp4', '.avi']
 
 
 def md5(file_name):  # used to calculate md5 checksum for file
@@ -12,7 +12,6 @@ def md5(file_name):  # used to calculate md5 checksum for file
 
 
 def valid_file_extension(filename):  # checking if file is a video file
-    if '.' in filename:
-        if filename.split('.')[-1] in extensions:
-            return True
-    return False
+    file_path = Path(filename)
+
+    return file_path.suffix in extensions
