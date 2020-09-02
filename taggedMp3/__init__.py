@@ -23,8 +23,11 @@ def create_app():
         from .model import File, Song
         if not os.path.exists(app.config['UPLOAD_FOLDER']):  # creating file upload folder if it doesn't exist
             File.query.delete()
-            os.makedirs(app.config['UPLOAD_FOLDER'])
-
+            try:
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+            except FileExistsError:
+                pass
+            
     from .routes import api_bp, template_bp
     app.register_blueprint(api_bp)
     app.register_blueprint(template_bp)
